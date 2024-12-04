@@ -13,45 +13,22 @@ Debes asegurarte de que el árbol tenga la forma correcta usando saltos de líne
 */
 
 function createXmasTree(height: number, ornament: string): string {
-    if (ornament.length != 1) return '';
-  
-    function getFilling(filling: number): string {
-    let fillingString = '';
-    
-    for (let i = 0; i < filling; i++)
-      fillingString = fillingString.concat('_');
-    
-    return fillingString;
-  }
-  
-  function getLeaves(leavesNum: number, ornament: string): string {
-    // inicio el string con la hoja del medio
-    let leaves = ornament;
-  
-    for (let i = 0; i < leavesNum; i++) 
-      leaves = leaves.concat(ornament);
-  
-    return leaves;
-  }
-  
-  function getBase(baseFilling: number): string {
-    const baseFillingString = getFilling(baseFilling);
-    const base = baseFillingString.concat('#', baseFillingString);
-    return base.concat('\n', base);
-  }
-  
-    let treeCrown = '';
-  
+    if (height < 1 || height > 100 || ornament.length !== 1) return '';
+
+    let tree = '';
+
     for (let i = 0; i < height; i++) {
-      const filling = getFilling(height - i - 1);
-      const leaves = getLeaves(i*2, ornament);
-      treeCrown = treeCrown.concat(filling, leaves, filling, '\n');
+        const padding = '_'.repeat(height - i - 1);
+        const leaves = ornament.repeat(2 * i + 1);
+        tree += `${padding}${leaves}${padding}\n`;
     }
-  
-  
-    return treeCrown.concat(getBase(height-1));
-  }
-  
+
+    const base = '_'.repeat(height - 1) + '#' + '_'.repeat(height - 1);
+    tree += `${base}\n${base}`;
+
+    return tree;
+}
+
 const tree = createXmasTree(5, '*')
 console.log(tree)
 /*
