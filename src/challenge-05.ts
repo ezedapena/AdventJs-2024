@@ -14,18 +14,24 @@ type Shoe = {
 }
 
 function organizeShoes(shoes: Shoe[]): number[] {
-    const sizesWithBothTypes = shoes.reduce((result: number[], shoe) => {
-        if (shoe.type === 'I') {
-            const rightShoeIndex = shoes.findIndex(s => s.type === 'R' && s.size === shoe.size)
-            if (rightShoeIndex > 0) {
-                shoes.splice(rightShoeIndex, 1);
-                result.push(shoe.size);
-            }
-        }
-        return result;
-    }, []);
+    const counts = new Map<number, { I: number; R: number }>();
 
-    return sizesWithBothTypes.sort((a, b) => a - b);
+    for (const { type, size } of shoes) {
+        if (!counts.has(size)) {
+            counts.set(size, { I: 0, R: 0 });
+        }
+        counts.get(size)![type]++;
+    }
+
+    const result: number[] = [];
+    for (const [size, { I, R }] of counts) {
+        const pairs = Math.min(I, R);
+        for (let i = 0; i < pairs; i++) {
+            result.push(size);
+        }
+    }
+
+    return result.sort((a, b) => a - b);
 }
 
 
