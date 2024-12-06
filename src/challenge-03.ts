@@ -18,15 +18,14 @@ type Inventory = Array<
 >
 
 function organizeInventory(inventory: Inventory): Record<string, Record<string, number>> {
-  return inventory.reduce((acc, item) => {
-    if (!acc[item.category]) {
-        acc[item.category] = {};
-    }
+  return inventory.reduce((result, { name, quantity, category }) => {
+      if (!result[category]) {
+          result[category] = {};
+      }
 
-    acc[item.category][item.name] = 
-        (acc[item.category][item.name] || 0) + item.quantity;
+      result[category][name] = (result[category][name] || 0) + quantity;
 
-    return acc;
+      return result;
   }, {} as Record<string, Record<string, number>>);
 }
 
