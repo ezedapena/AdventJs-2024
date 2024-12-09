@@ -32,31 +32,24 @@ type Movement = 'U' | 'D' | 'R' | 'L'
 type Result = 'none' | 'crash' | 'eat'
 
 function moveTrain(board: Board, mov: Movement): Result {
-    function findInteraction(space: Space | null): Result {
-        if (!!space) {
-            switch (space) {
-                case '·': return 'none'
-                case '*': return 'eat'
-                case 'o': return 'crash'
-            }
-        }
+    const indexEngine = board.findIndex(el => el.includes('@'));
+    const engine = board[indexEngine];
+    const positionEngine = engine.indexOf('@');
 
-        return 'crash';
-    }
+    const char = {
+        'U': board[indexEngine - 1]?.[positionEngine],
+        'D': board[indexEngine + 1]?.[positionEngine],
+        'L': engine[positionEngine - 1],
+        'R': engine[positionEngine + 1],
+    }[mov];
 
-    const engineRow = board.findIndex(row => row.includes('@'));
-    const engineColumn = board[engineRow].indexOf('@');
-
-    let movSpace: Space | null = null;
-
-    switch (mov) {
-        case "U": movSpace = board[engineRow - 1]?.[engineColumn] ?? null; break;
-        case "D": movSpace = board[engineRow + 1]?.[engineColumn] ?? null; break;
-        case "R": movSpace = board[engineRow]?.[engineColumn + 1] ?? null; break;
-        case "L": movSpace = board[engineRow]?.[engineColumn - 1] ?? null; break;
-    }
-
-    return findInteraction(movSpace);
+    const resultMap: Record<string | number | symbol, Result> = {
+        '*': 'eat',
+        'o': 'crash',
+        '·': 'none',
+        undefined: 'crash',
+    };
+    return resultMap[char];
 }
 
 const board: Board = [
