@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "ts-node ./src/challenge-16.ts"
+    "start": "ts-node ./src/challenge-17.ts"
   },
   "devDependencies": {
     "ts-node": "^10.9.2",
